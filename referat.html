@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="bg" ng-app="webRtcApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реферат: WebRTC - Принципи на работа и Интеграция с PHP</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/site.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script src="javascript/camera-demo.js"></script>
+
+    <script src="javascript/app.js"></script>
+
+</head>
+<body ng-controller="MainController as mainCtrl" class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto p-4 lg:p-8 max-w-7xl">
+        <header class="mb-8 text-center">
+             <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Реферат: WebRTC</h1>
+            <p class="text-xl text-gray-600">Принципи на работа и интеграция с PHP</p>
+            <p class="text-sm text-gray-500">Студент: [Вашето Име], Ф.Н.: [Вашият Ф.Н.]</p>
+            <p class="text-sm text-gray-500">Дата: {{ mainCtrl.currentDate | date:'dd.MM.yyyy' }}</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <aside id="sidebar" class="lg:col-span-1">
+                <nav class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Съдържание</h3>
+                    <ul>
+                        <li><a href="#introduction" ng-click="mainCtrl.setActive('introduction')" ng-class="{ 'active': mainCtrl.isActive('introduction') }">1. Въведение</a></li>
+                        <li><a href="#core-concepts" ng-click="mainCtrl.setActive('core-concepts')" ng-class="{ 'active': mainCtrl.isActive('core-concepts') }">2. Основни Концепции</a></li>
+                        <li><a href="#how-it-works" ng-click="mainCtrl.setActive('how-it-works')" ng-class="{ 'active': mainCtrl.isActive('how-it-works') }">3. Как работи WebRTC?</a></li>
+                        <li><a href="#apis" ng-click="mainCtrl.setActive('apis')" ng-class="{ 'active': mainCtrl.isActive('apis') }">4. WebRTC API</a></li>
+                        <li><a href="#camera-demo-section" ng-click="mainCtrl.setActive('camera-demo-section')" ng-class="{ 'active': mainCtrl.isActive('camera-demo-section') }">5. Демо: Достъп до Камера</a></li>
+                        <li><a href="#signaling" ng-click="mainCtrl.setActive('signaling')" ng-class="{ 'active': mainCtrl.isActive('signaling') }">6. Сигнализация</a></li>
+                        <li><a href="#php-integration" ng-click="mainCtrl.setActive('php-integration')" ng-class="{ 'active': mainCtrl.isActive('php-integration') }">7. WebRTC с PHP</a></li>
+                        <li><a href="#use-cases" ng-click="mainCtrl.setActive('use-cases')" ng-class="{ 'active': mainCtrl.isActive('use-cases') }">8. Приложения</a></li>
+                        <li><a href="#security" ng-click="mainCtrl.setActive('security')" ng-class="{ 'active': mainCtrl.isActive('security') }">9. Сигурност</a></li>
+                        <li><a href="#conclusion" ng-click="mainCtrl.setActive('conclusion')" ng-class="{ 'active': mainCtrl.isActive('conclusion') }">10. Заключение</a></li>
+                        <li><a href="#bibliography" ng-click="mainCtrl.setActive('bibliography')" ng-class="{ 'active': mainCtrl.isActive('bibliography') }">11. Цитирана Литература</a></li>
+                        <li><a href="#figures-list" ng-click="mainCtrl.setActive('figures-list')" ng-class="{ 'active': mainCtrl.isActive('figures-list') }">12. Списък с Фигури</a></li>
+                        <li><a href="#code-list" ng-click="mainCtrl.setActive('code-list')" ng-class="{ 'active': mainCtrl.isActive('code-list') }">13. Списък с Код</a></li>
+                        <li><a href="#tables-list" ng-click="mainCtrl.setActive('tables-list')" ng-class="{ 'active': mainCtrl.isActive('tables-list') }">14. Списък с Таблици</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="lg:col-span-3">
+                 <section id="introduction" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 1;">
+                    <h2>1. Въведение в WebRTC</h2>
+                     <p>
+                        Web Real-Time Communication (WebRTC) е отворен проект, предоставящ на уеб браузърите и мобилните приложения възможности за комуникация в реално време (Real-Time Communication - RTC) чрез прости програмни интерфейси (API). WebRTC позволява на потребителите да осъществяват аудио и видео разговори, както и да обменят данни директно между браузърите (peer-to-peer), без необходимост от инсталиране на допълнителни плъгини или софтуер <a href="#ref-1" class="citation-marker">[1]</a>.
+                    </p>
+                     <p>
+                        Технологията е разработена и поддържана от Google, Mozilla, Opera и други, и е стандартизирана от W3C (World Wide Web Consortium) и IETF (Internet Engineering Task Force). Основната цел на WebRTC е да демократизира комуникацията в реално време, като я направи лесно достъпна за уеб разработчиците.
+                    </p>
+                     <figure>
+                         <img src="img/placeholder_webrtc_logo.png" alt="WebRTC Лого или Диаграма" onerror="this.onerror=null; this.src='https://placehold.co/600x300/e2e8f0/334155?text=WebRTC+Diagram';" >
+                        <figcaption>Фигура 1. Илюстрация на WebRTC концепция <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
+                    </figure>
+                     <p>
+                        Този реферат разглежда основните принципи на работа на WebRTC, ключовите му API-та, процеса на сигнализация (включително ролята на PHP) и някои от основните му приложения и аспекти на сигурността.
+                    </p>
+                </section>
+
+                 <section id="core-concepts" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 2;">
+                    <h2>2. Основни Концепции</h2>
+                     <p>
+                        За да разберем как работи WebRTC, е важно да се запознаем с няколко ключови концепции:
+                    </p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Peer-to-Peer (P2P) Комуникация:</strong> Основната идея на WebRTC е да установи директна връзка между двама потребители (peers) за обмен на данни, аудио и видео. Това намалява латентността и натоварването на сървърите.</li>
+                        <li><strong>Сигнализация (Signaling):</strong> Процесът на координация на комуникацията. WebRTC не дефинира стандарт за сигнализация; разработчиците трябва да имплементират собствен механизъм (често чрез WebSockets) за обмен на контролна информация като Session Description Protocol (SDP) оферти/отговори и ICE кандидати <a href="#ref-2" class="citation-marker">[2]</a>.</li>
+                        <li><strong>STUN (Session Traversal Utilities for NAT) Сървъри:</strong> Помагат на устройствата да открият своя публичен IP адрес и тип NAT (Network Address Translator), зад който се намират. Това е необходимо за установяване на P2P връзка.</li>
+                        <li><strong>TURN (Traversal Using Relays around NAT) Сървъри:</strong> Използват се като резервен вариант, когато директна P2P връзка не е възможна (например поради симетрични NAT или рестриктивни защитни стени). TURN сървърите действат като посредници (релета), препредавайки трафика между потребителите.</li>
+                        <li><strong>ICE (Interactive Connectivity Establishment):</strong> Фреймуърк, който използва STUN и TURN сървъри, за да намери най-добрия възможен път за връзка между двама потребители.</li>
+                        <li><strong>SDP (Session Description Protocol):</strong> Протокол, описващ мултимедийни сесии. WebRTC го използва за договаряне на параметри на връзката като кодеци, IP адреси и портове.</li>
+                    </ul>
+                     <figure>
+                         <img src="img/placeholder_stun_turn.png" alt="Диаграма на STUN/TURN/Signaling" onerror="this.onerror=null; this.src='https://placehold.co/700x400/e2e8f0/334155?text=STUN/TURN+Diagram';" >
+                        <figcaption>Фигура 2. Роля на сигнализацията, STUN и TURN сървърите <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
+                    </figure>
+                </section>
+
+                 <section id="how-it-works" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 3;">
+                    <h2>3. Как работи WebRTC?</h2>
+                     <p>
+                        Процесът на установяване на WebRTC връзка обикновено следва тези стъпки:
+                    </p>
+                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                        <li><strong>Достъп до Медия:</strong> Единият потребител (инициатор) получава достъп до камерата и/или микрофона си чрез <code>getUserMedia()</code> API.</li>
+                        <li><strong>Създаване на PeerConnection:</strong> Инициаторът създава обект <code>RTCPeerConnection</code>.</li>
+                        <li><strong>Създаване на Оферта (Offer):</strong> Инициаторът създава SDP оферта чрез <code>createOffer()</code>, която описва неговите медийни възможности и желани параметри на сесията. Той задава тази оферта като свое локално описание (<code>setLocalDescription()</code>).</li>
+                        <li><strong>Изпращане на Офертата:</strong> Инициаторът изпраща SDP офертата на другия потребител (получател) чрез избрания сигнализиращ механизъм (например WebSocket сървър).</li>
+                        <li><strong>Получаване на Офертата:</strong> Получателят получава офертата и я задава като свое отдалечено описание (<code>setRemoteDescription()</code>).</li>
+                        <li><strong>Създаване на Отговор (Answer):</strong> Получателят създава SDP отговор чрез <code>createAnswer()</code>, описващ неговите възможности. Той задава този отговор като свое локално описание (<code>setLocalDescription()</code>).</li>
+                        <li><strong>Изпращане на Отговора:</strong> Получателят изпраща SDP отговора обратно на инициатора чрез сигнализиращия механизъм.</li>
+                        <li><strong>Получаване на Отговора:</strong> Инициаторът получава отговора и го задава като свое отдалечено описание (<code>setRemoteDescription()</code>).</li>
+                        <li><strong>Обмен на ICE Кандидати:</strong> По време на горните стъпки, и двамата потребители генерират ICE кандидати (информация за потенциални мрежови пътища - IP адреси и портове, открити чрез STUN/TURN). Тези кандидати се обменят чрез сигнализиращия канал. Всеки потребител добавя получените кандидати към своя <code>RTCPeerConnection</code> обект чрез <code>addIceCandidate()</code>.</li>
+                        <li><strong>Установяване на Връзка:</strong> След успешния обмен на SDP и ICE кандидати, WebRTC се опитва да установи директна P2P връзка. Ако успее, медийният поток започва да тече директно между потребителите. Ако не, може да се използва TURN реле.</li>
+                    </ol>
+                     <p>
+                        Сигнализацията е критична, но гъвкава част - тя е извън обхвата на самия WebRTC стандарт и трябва да бъде имплементирана отделно.
+                    </p>
+                </section>
+
+                 <section id="apis" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 4;">
+                    <h2>4. WebRTC API</h2>
+                    <p>
+                        WebRTC предоставя три основни JavaScript API-та:
+                    </p>
+                    <div class="space-y-4">
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-blue-600"><i class="fas fa-camera mr-2"></i> MediaStream (getUserMedia)</h3>
+                            <p>Този API позволява на уеб приложенията да получат достъп до аудио и видео потоци от локални устройства като камери и микрофони. Резултатът е обект <code>MediaStream</code>, който може да бъде прикачен към <code>&lt;video&gt;</code> или <code>&lt;audio&gt;</code> елемент или добавен към <code>RTCPeerConnection</code> <a href="#ref-3" class="citation-marker">[3]</a>.</p>
+                            <pre><code class="language-javascript">// Пример за достъп до камера и микрофон
+navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Искаме и аудио
+  .then(stream => {
+    // Нужен е <video id="localVideo"></video> елемент в HTML
+    const videoElement = document.querySelector('video#localVideo');
+    if (videoElement) videoElement.srcObject = stream;
+    // stream може да се добави към RTCPeerConnection
+    // stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+  })
+  .catch(error => {
+    console.error('Грешка при достъп до медия:', error);
+  });</code></pre>
+                           <figcaption class="mt-2 text-sm text-gray-500">Код 1. Пример за използване на `getUserMedia`</figcaption>
+                        </div>
+
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-blue-600"><i class="fas fa-network-wired mr-2"></i> RTCPeerConnection</h3>
+                            <p>Това е централният компонент на WebRTC. Той управлява установяването и поддържането на връзката между двама потребители. Чрез него се добавят медийни потоци, създават се SDP оферти/отговори и се обработват ICE кандидати <a href="#ref-4" class="citation-marker">[4]</a>.</p>
+                            <pre><code class="language-javascript">// Пример за създаване на RTCPeerConnection
+const configuration = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' } // Публичен STUN сървър
+    // Може да се добавят и TURN сървъри тук (изискват credentials)
+    // {
+    //   urls: 'turn:your.turn.server:3478',
+    //   username: 'user',
+    //   credential: 'password'
+    // }
+  ]
+};
+let peerConnection; // Декларирайте го извън then() на getUserMedia
+try {
+    peerConnection = new RTCPeerConnection(configuration);
+} catch (error) {
+    console.error("Грешка при създаване на RTCPeerConnection:", error);
+}
+
+// Добавяне на локален медиен поток (след като е получен от getUserMedia)
+// Предполагаме, че localStream е наличен
+// localStream.getTracks().forEach(track => {
+//   if (peerConnection) peerConnection.addTrack(track, localStream);
+// });
+
+// Обработка на събития
+if (peerConnection) {
+    peerConnection.onicecandidate = event => {
+      if (event.candidate) {
+        // Изпрати event.candidate на другия peer чрез сигнализация
+        // signalingChannel.send({ type: 'ice-candidate', candidate: event.candidate });
+        console.log("Generated ICE Candidate:", event.candidate);
+      }
+    };
+
+    peerConnection.ontrack = event => {
+      // Нужен е <video id="remoteVideo"></video> елемент в HTML
+      const remoteVideo = document.querySelector('video#remoteVideo');
+      if (remoteVideo && event.streams && event.streams[0]) {
+          remoteVideo.srcObject = event.streams[0];
+      }
+    };
+
+    peerConnection.oniceconnectionstatechange = event => {
+        console.log("ICE Connection State:", peerConnection.iceConnectionState);
+        // Може да се използва за показване на статуса на връзката
+    };
+}
+</code></pre>
+                           <figcaption class="mt-2 text-sm text-gray-500">Код 2. Пример за създаване и използване на `RTCPeerConnection`</figcaption>
+                        </div>
+
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                             <h3 class="text-lg font-semibold text-blue-600"><i class="fas fa-exchange-alt mr-2"></i> RTCDataChannel</h3>
+                            <p>Позволява изпращането на произволни данни директно между потребителите (peer-to-peer). Това е полезно за приложения като чат, споделяне на файлове, игри в реално време и др. Може да бъде конфигуриран да работи надеждно (подобно на TCP) или ненадеждно и неуредено (подобно на UDP) <a href="#ref-5" class="citation-marker">[5]</a>.</p>
+                            <pre><code class="language-javascript">let dataChannel;
+
+if (peerConnection) {
+    // Създаване на Data Channel (от инициатора)
+    try {
+        dataChannel = peerConnection.createDataChannel('myDataChannel', { reliable: true }); // reliable: true е по подразбиране
+
+        dataChannel.onopen = () => {
+            console.log('Data channel отворен!');
+            // Може да изпратите съобщение веднага щом се отвори
+            // dataChannel.send('Здравей от инициатора!');
+        };
+        dataChannel.onmessage = event => console.log('Получено съобщение (инициатор):', event.data);
+        dataChannel.onclose = () => console.log('Data channel затворен (инициатор).');
+        dataChannel.onerror = error => console.error('Data channel грешка (инициатор):', error);
+
+    } catch (error) {
+         console.error("Грешка при създаване на Data Channel:", error);
+    }
+
+
+    // Обработка на Data Channel (от получателя)
+    peerConnection.ondatachannel = event => {
+      const receiveChannel = event.channel;
+      console.log('Получен Data Channel от другия peer:', receiveChannel.label);
+
+      receiveChannel.onmessage = event => console.log('Получено съобщение (получател):', event.data);
+      receiveChannel.onopen = () => console.log('Data channel отворен (получател)!');
+      receiveChannel.onclose = () => console.log('Data channel затворен (получател).');
+      receiveChannel.onerror = error => console.error('Data channel грешка (получател):', error);
+
+      // Запазваме референция, за да можем да изпращаме от получателя
+      // dataChannel = receiveChannel;
+    };
+}
+
+// Изпращане на данни (след като каналът е 'open')
+function sendData(message) {
+    if (dataChannel && dataChannel.readyState === 'open') {
+        dataChannel.send(message);
+        console.log("Изпратено:", message);
+    } else {
+        console.warn("Data channel не е готов за изпращане.");
+    }
+}
+// Примерно извикване: sendData('Тестово съобщение!');</code></pre>
+                            <figcaption class="mt-2 text-sm text-gray-500">Код 3. Пример за използване на `RTCDataChannel`</figcaption>
+                        </div>
+                    </div>
+                </section> <section id="camera-demo-section" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 5;">
+                     <h2>5. Демо: Достъп до Камера</h2>
+                    <p>
+                        Това интерактивно демо използва <code>getUserMedia</code> API, за да поиска достъп до вашата камера и да покаже видео потока директно в страницата. Това илюстрира основната функционалност за улавяне на медия в WebRTC.
+                    </p>
+                    <div class="camera-demo mt-4 p-4 border border-dashed border-blue-300 rounded-lg bg-blue-50">
+                        <h4 class="text-md font-semibold text-blue-700 mb-3">Тест на Камера</h4>
+                        <div class="flex items-center space-x-4 mb-3">
+                            <button ng-click="mainCtrl.cameraService.startCamera()" ng-disabled="mainCtrl.cameraService.isCameraActive()"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out">
+                                <i class="fas fa-video mr-1"></i> Старт Камера
+                            </button>
+                             <button ng-click="mainCtrl.cameraService.stopCamera()" ng-disabled="!mainCtrl.cameraService.isCameraActive()"
+                                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out">
+                                <i class="fas fa-video-slash mr-1"></i> Стоп Камера
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3" ng-bind="mainCtrl.cameraService.status"></p>
+                        <video id="userVideoDemo" playsinline autoplay muted
+                               class="w-full max-w-sm h-auto rounded-md bg-gray-900 border border-gray-300"
+                               ng-show="mainCtrl.cameraService.isCameraActive()"></video>
+                   </div>
+                </section>
+                <section id="signaling" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 6;">
+                    <h2>6. Сигнализация</h2>
+                     <p>
+                        Както беше споменато, WebRTC не специфицира как трябва да се осъществява сигнализацията. Това е процесът на обмен на метаданни, необходими за установяване на връзката:
+                    </p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>SDP оферти и отговори.</li>
+                        <li>ICE кандидати.</li>
+                        <li>Информация за контрол на сесията (напр. започване, прекратяване на разговор).</li>
+                    </ul>
+                    <p>
+                        Разработчиците трябва да изградят или използват съществуващ механизъм за този обмен. Най-често срещаният подход е използването на <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener noreferrer">WebSockets</a>, тъй като те осигуряват двупосочен комуникационен канал в реално време между клиента (браузъра) и сървъра. Сървърът действа като посредник, препращайки сигнализиращите съобщения между потребителите, които искат да се свържат <a href="#ref-6" class="citation-marker">[6]</a>.
+                    </p>
+                    <p>
+                        Други възможни механизми включват Server-Sent Events (SSE), HTTP long-polling или дори по-екзотични методи, но WebSockets са предпочитани заради ефективността си.
+                    </p>
+                     <figure>
+                         <img src="img/placeholder_signaling.png" alt="Диаграма на Сигнализиращ Сървър" onerror="this.onerror=null; this.src='https://placehold.co/650x350/e2e8f0/334155?text=Signaling+Server';" >
+                        <figcaption>Фигура 3. Ролята на сигнализиращия сървър <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
+                    </figure>
+                </section>
+
+                <section id="php-integration" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 7;">
+                    <h2>7. WebRTC с PHP</h2>
+                     <p>
+                        Въпреки че WebRTC комуникацията (аудио, видео, данни) е предимно peer-to-peer (клиент-клиент), сървърът играе ключова роля в процеса на сигнализация. PHP може да бъде използван за изграждане на такъв сигнализиращ сървър.
+                    </p>
+                    <p>
+                        Тъй като стандартният модел на PHP (request-response) не е идеален за поддържане на постоянни WebSocket връзки, обикновено се използват специализирани PHP библиотеки, които позволяват асинхронна работа и управление на WebSockets. Популярни опции включват:
+                    </p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong><a href="http://socketo.me/" target="_blank" rel="noopener noreferrer">Ratchet</a>:</strong> Библиотека за асинхронни WebSocket приложения в PHP. Тя позволява на PHP скрипт да работи като дълготраен процес, който слуша за и обработва WebSocket връзки.</li>
+                        <li><strong><a href="https://swoole.co.uk/" target="_blank" rel="noopener noreferrer">Swoole</a> / <a href="https://openswoole.com/" target="_blank" rel="noopener noreferrer">Open Swoole</a>:</strong> PHP разширение, което предоставя асинхронни, паралелни и мрежови възможности на високо ниво, включително вградени WebSocket сървъри.</li>
+                        <li><strong><a href="https://workerman.net/" target="_blank" rel="noopener noreferrer">Workerman</a>:</strong> Асинхронна сокетна рамка за PHP с поддръжка на WebSockets.</li>
+                    </ul>
+                    <p>
+                        Ролята на PHP сигнализиращия сървър е да:
+                    </p>
+                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                        <li>Приема WebSocket връзки от клиенти (браузъри).</li>
+                        <li>Управлява "стаи" или сесии, където потребителите могат да се намират.</li>
+                        <li>Получава сигнализиращи съобщения (SDP оферти/отговори, ICE кандидати) от един клиент.</li>
+                        <li>Препраща тези съобщения до съответния друг клиент(и) в същата стая/сесия.</li>
+                        <li>Обработва свързване/разкачане на потребители и уведомява останалите.</li>
+                    </ol>
+                     <pre><code class="language-php">// Псевдокод за прост PHP WebSocket сигнализиращ сървър (използвайки Ratchet)
+// Файл: src/SignalingServer.php (примерно местоположение)
+namespace MyApp; // Заменете с вашето пространство на имената
+
+use Ratchet\MessageComponentInterface;
+use Ratchet\ConnectionInterface;
+
+class SignalingServer implements MessageComponentInterface {
+    protected $clients;
+    protected $rooms; // За управление на връзки по стаи
+
+    public function __construct() {
+        $this->clients = new \SplObjectStorage;
+        $this->rooms = []; // [roomId => [conn1, conn2, ...]]
+        echo "Signaling server started...\n";
+    }
+
+    public function onOpen(ConnectionInterface $conn) {
+        $this->clients->attach($conn);
+        // Може да се добави логика за присъединяване към стая при свързване
+        // $roomId = $conn->httpRequest->getUri()->getQuery(); // Примерно вземане на ID на стая от URL
+        echo "New connection! ({$conn->resourceId})\n";
+    }
+
+    public function onMessage(ConnectionInterface $from, $msg) {
+        $data = json_decode($msg);
+        echo "Message from {$from->resourceId}: " . print_r($data, true) . "\n";
+
+        // Примерна логика за препращане в стая
+        // Трябва да се имплементира механизъм за управление на стаи
+        // Например, при свързване клиентът изпраща съобщение { type: 'join', room: 'roomId' }
+        // и сървърът го добавя към $this->rooms['roomId']
+
+        // Препращане на съобщението до другите в същата стая (опростено)
+        foreach ($this->clients as $client) {
+            // Пропуснете изпращача
+            if ($from !== $client) {
+                // В реално приложение: проверете дали $client е в същата стая като $from
+                $client->send($msg);
+                echo "Relaying message to {$client->resourceId}\n";
+            }
+        }
+    }
+
+    public function onClose(ConnectionInterface $conn) {
+        $this->clients->detach($conn);
+        // Премахване от всички стаи, в които е бил
+        echo "Connection {$conn->resourceId} has disconnected\n";
+    }
+
+    public function onError(ConnectionInterface $conn, \Exception $e) {
+        echo "An error has occurred on connection {$conn->resourceId}: {$e->getMessage()}\n";
+        $conn->close();
+    }
+}
+
+// Стартиране на сървъра (обикновено в отделен скрипт, напр. bin/server.php)
+/*
+require dirname(__DIR__) . '/vendor/autoload.php'; // Път до autoload.php
+
+use Ratchet\Server\IoServer;
+use Ratchet\Http\HttpServer;
+use Ratchet\WebSocket\WsServer;
+use MyApp\SignalingServer; // Път до вашия клас
+
+$server = IoServer::factory(
+    new HttpServer(
+        new WsServer(
+            new SignalingServer() // Използване на вашия клас
+        )
+    ),
+    8080 // Порт, на който слуша сървърът
+);
+
+echo "Starting WebSocket server on port 8080...\n";
+$server->run();
+*/
+</code></pre>
+                     <figcaption class="mt-2 text-sm text-gray-500">Код 4. Псевдокод за PHP WebSocket сигнализиращ сървър с Ratchet</figcaption>
+                     <p>
+                        Важно е да се отбележи, че PHP сървърът обработва само сигнализацията. Самият медиен поток (аудио/видео/данни) след установяване на връзката тече директно между клиентите (P2P) или през TURN сървър, заобикаляйки PHP сървъра.
+                    </p>
+                </section>
+
+                <section id="use-cases" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 8;">
+                    <h2>8. Приложения на WebRTC</h2>
+                     <p>
+                        WebRTC отваря врати за множество приложения, базирани на комуникация в реално време директно в браузъра:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-green-600"><i class="fas fa-video mr-2"></i> Видео и Аудио Конференции</h3>
+                            <p>Най-очевидното приложение. Услуги като Google Meet, Discord, Jitsi Meet и много други използват WebRTC за осъществяване на разговори.</p>
+                        </div>
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-purple-600"><i class="fas fa-file-alt mr-2"></i> Споделяне на Файлове (P2P)</h3>
+                            <p><code>RTCDataChannel</code> позволява директно изпращане на файлове между потребителите, без да се налага качването им на сървър.</p>
+                        </div>
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-red-600"><i class="fas fa-gamepad mr-2"></i> Игри в Реално Време</h3>
+                            <p>За мултиплейър игри, където ниската латентност е критична, P2P връзките през <code>RTCDataChannel</code> са много подходящи.</p>
+                        </div>
+                        <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-yellow-600"><i class="fas fa-headset mr-2"></i> Системи за Поддръжка и Чат на Живо</h3>
+                            <p>Интегриране на видео/аудио чат или споделяне на екран директно в уебсайтове за клиентска поддръжка.</p>
+                        </div>
+                         <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-indigo-600"><i class="fas fa-share-square mr-2"></i> Споделяне на Екран</h3>
+                            <p>API-то <code>getDisplayMedia()</code> (свързано с WebRTC) позволява споделяне на целия екран или конкретен прозорец.</p>
+                        </div>
+                         <div class="interactive-card border border-gray-200 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-pink-600"><i class="fas fa-broadcast-tower mr-2"></i> Поточно Предаване (Streaming)</h3>
+                            <p>Въпреки че не е основната цел, WebRTC може да се използва и за P2P стрийминг сценарии.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="security" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 9;">
+                    <h2>9. Сигурност в WebRTC</h2>
+                     <p>
+                        Сигурността е фундаментален аспект на WebRTC. Всички WebRTC компоненти изискват криптиране <a href="#ref-7" class="citation-marker">[7]</a>.
+                    </p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Криптиране:</strong> Целият WebRTC трафик (аудио, видео, данни) е задължително криптиран с помощта на SRTP (Secure Real-time Transport Protocol) за медийните потоци и DTLS (Datagram Transport Layer Security) за данните през <code>RTCDataChannel</code> и за установяване на ключовете за SRTP. Сигнализацията не се криптира от WebRTC, но е силно препоръчително тя да се осъществява през защитен канал (напр. WSS - WebSockets over TLS).</li>
+                        <li><strong>Разрешения:</strong> Достъпът до камерата и микрофона изисква изрично разрешение от потребителя чрез промпт на браузъра.</li>
+                        <li><strong>Без Плъгини:</strong> Тъй като WebRTC е вграден в браузъра, няма нужда от инсталиране на потенциално несигурни плъгини.</li>
+                        <li><strong>IP Адреси:</strong> Разкриването на IP адреси чрез ICE кандидатите е потенциален риск за поверителността. Използването на VPN или TURN сървъри може да помогне за маскирането на реалния IP адрес, но сигнализиращият сървър и STUN/TURN сървърите все пак ще знаят IP адресите на потребителите.</li>
+                    </ul>
+                    <p>
+                        Въпреки вградените механизми за сигурност, разработчиците трябва да са внимателни при имплементирането на сигнализацията и управлението на потребителските сесии, за да предотвратят уязвимости.
+                    </p>
+                     <table class="table-auto">
+                         <thead>
+                            <tr>
+                                <th>Компонент</th>
+                                <th>Протокол за Сигурност</th>
+                                <th>Задължително?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Медийни потоци (Аудио/Видео)</td>
+                                <td>SRTP (Secure Real-time Transport Protocol)</td>
+                                <td>Да</td>
+                            </tr>
+                            <tr>
+                                <td>Data Channels (RTCDataChannel)</td>
+                                <td>DTLS (Datagram Transport Layer Security)</td>
+                                <td>Да</td>
+                            </tr>
+                             <tr>
+                                <td>Обмен на ключове (за SRTP)</td>
+                                <td>DTLS (Datagram Transport Layer Security)</td>
+                                <td>Да</td>
+                            </tr>
+                            <tr>
+                                <td>Сигнализация (Signaling)</td>
+                                <td>WSS (Secure WebSockets) / HTTPS</td>
+                                <td>Не (но силно препоръчително)</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-center text-sm text-gray-500">Таблица 1. Протоколи за сигурност в WebRTC <a href="#ref-placeholder" class="citation-marker">[Източник]</a></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </section>
+
+                <section id="conclusion" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 10;">
+                    <h2>10. Заключение</h2>
+                     <p>
+                        WebRTC е мощна и гъвкава технология, която революционизира комуникацията в реално време в уеб. Тя позволява на разработчиците да създават богати, интерактивни приложения за аудио/видео разговори, споделяне на данни и много други, директно в браузъра, без нужда от плъгини.
+                    </p>
+                    <p>
+                        Ключът към успешното използване на WebRTC е разбирането на основните му компоненти (<code>MediaStream</code>, <code>RTCPeerConnection</code>, <code>RTCDataChannel</code>), процеса на установяване на връзка чрез сигнализация и ICE, както и вградените механизми за сигурност.
+                    </p>
+                    <p>
+                        Интеграцията с бекенд технологии като PHP е напълно възможна и често необходима за изграждането на сигнализиращия сървър, който координира връзките между потребителите. Използването на асинхронни PHP библиотеки като Ratchet, Swoole или Workerman позволява ефективното управление на WebSocket връзките, необходими за сигнализацията.
+                    </p>
+                     <p>
+                        Бъдещето на WebRTC изглежда светло, с непрекъснато развитие на стандарта, подобряване на производителността и разширяване на поддръжката в различни браузъри и платформи.
+                    </p>
+                </section>
+
+                <section id="bibliography" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in bibliography" style="--section-index: 11;">
+                    <h2>11. Цитирана Литература</h2>
+                     <p class="text-sm text-gray-600 mb-4">Забележка: Това са примерни цитати. Трябва да ги замените с реални източници на английски език, които сте използвали, и да ги форматирате според изискванията.</p>
+                    <ol>
+                        <li id="ref-1">
+                            MDN Web Docs, "WebRTC API", [https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API), последно посетен на 2025-04-25.
+                        </li>
+                        <li id="ref-2">
+                            Google Developers, "WebRTC basics: Signaling", [https://webrtc.org/getting-started/overview#signaling](https://webrtc.org/getting-started/overview#signaling), последно посетен на 2025-04-25. (Заменете с реален източник)
+                        </li>
+                         <li id="ref-3">
+                            MDN Web Docs, "MediaDevices.getUserMedia()", [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia), последно посетен на 2025-04-25.
+                        </li>
+                         <li id="ref-4">
+                            MDN Web Docs, "RTCPeerConnection", [https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection), последно посетен на 2025-04-25.
+                        </li>
+                         <li id="ref-5">
+                            MDN Web Docs, "RTCDataChannel", [https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel), последно посетен на 2025-04-25.
+                        </li>
+                         <li id="ref-6">
+                            Sam Dutton, "WebRTC in the real world: STUN, TURN, and signaling", [https://webrtc.org/getting-started/overview](https://webrtc.org/getting-started/overview), последно посетен на 2025-04-25. (Заменете с реален, специфичен източник за сигнализация)
+                        </li>
+                         <li id="ref-7">
+                            WebRTC.org, "Security", [https://webrtc.org/getting-started/security](https://webrtc.org/getting-started/security), последно посетен на 2025-04-25.
+                        </li>
+                        <li id="ref-placeholder">
+                            [Автор(и)], "[Заглавие на статия/ресурс]", [Издател/Уебсайт], [Дата на публикуване/достъп], [URL], последно посетен на ГГГГ-ММ-ДД. (Формат за други източници)
+                        </li>
+                    </ol>
+                </section>
+
+                <section id="figures-list" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in list-container" style="--section-index: 12; --list-prefix: 'Фигура';">
+                    <h2>12. Списък с Фигури</h2>
+                     <ol>
+                        <li>Илюстрация на WebRTC концепция <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
+                        <li>Роля на сигнализацията, STUN и TURN сървърите <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
+                        <li>Ролята на сигнализиращия сървър <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
+                    </ol>
+                </section>
+
+                <section id="code-list" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in list-container" style="--section-index: 13; --list-prefix: 'Код';">
+                    <h2>13. Списък с Код</h2>
+                     <ol>
+                        <li>Пример за използване на `getUserMedia`</li>
+                        <li>Пример за създаване и използване на `RTCPeerConnection`</li>
+                        <li>Пример за използване на `RTCDataChannel`</li>
+                        <li>Псевдокод за PHP WebSocket сигнализиращ сървър с Ratchet</li>
+                    </ol>
+                </section>
+
+                 <section id="tables-list" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in list-container" style="--section-index: 14; --list-prefix: 'Таблица';">
+                    <h2>14. Списък с Таблици</h2>
+                     <ol>
+                        <li>Протоколи за сигурност в WebRTC <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
+                    </ol>
+                </section>
+
+            </main>
+        </div>
+
+        <footer class="mt-12 pt-6 border-t border-gray-300 text-center text-gray-500 text-sm">
+             <p>&copy; {{ mainCtrl.currentDate | date:'yyyy' }} [Вашето Име]. Всички права запазени.</p>
+            <p>Реферат по Уеб Технологии, [Университет/Факултет]</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
