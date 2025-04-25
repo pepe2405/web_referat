@@ -17,11 +17,12 @@
 
 </head>
 <body ng-controller="MainController as mainCtrl" class="bg-gray-50 text-gray-800">
+
     <div class="container mx-auto p-4 lg:p-8 max-w-7xl">
         <header class="mb-8 text-center">
              <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Реферат: WebRTC</h1>
             <p class="text-xl text-gray-600">Принципи на работа и интеграция с PHP</p>
-            <p class="text-sm text-gray-500">Студент: [Вашето Име], Ф.Н.: [Вашият Ф.Н.]</p>
+            <p class="text-sm text-gray-500">Студент: Преслав Петров, Ф.Н.: 7MI0600220</p>
             <p class="text-sm text-gray-500">Дата: {{ mainCtrl.currentDate | date:'dd.MM.yyyy' }}</p>
         </header>
 
@@ -57,10 +58,9 @@
                      <p>
                         Технологията е разработена и поддържана от Google, Mozilla, Opera и други, и е стандартизирана от W3C (World Wide Web Consortium) и IETF (Internet Engineering Task Force). Основната цел на WebRTC е да демократизира комуникацията в реално време, като я направи лесно достъпна за уеб разработчиците.
                     </p>
-                     <figure>
-                         <img src="img/placeholder_webrtc_logo.png" alt="WebRTC Лого или Диаграма" onerror="this.onerror=null; this.src='https://placehold.co/600x300/e2e8f0/334155?text=WebRTC+Diagram';" >
-                        <figcaption>Фигура 1. Илюстрация на WebRTC концепция <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
-                    </figure>
+                     <figure id="figure-1-container"> <img src="images/WebRTC-system-architecture.png" alt="WebRTC Лого или Диаграма" onerror="this.onerror=null;">
+                         <figcaption>Фигура 1. Илюстрация на WebRTC концепция <a href="#fig-1" class="citation-marker">[Източник]</a></figcaption>
+                     </figure>
                      <p>
                         Този реферат разглежда основните принципи на работа на WebRTC, ключовите му API-та, процеса на сигнализация (включително ролята на PHP) и някои от основните му приложения и аспекти на сигурността.
                     </p>
@@ -79,10 +79,9 @@
                         <li><strong>ICE (Interactive Connectivity Establishment):</strong> Фреймуърк, който използва STUN и TURN сървъри, за да намери най-добрия възможен път за връзка между двама потребители.</li>
                         <li><strong>SDP (Session Description Protocol):</strong> Протокол, описващ мултимедийни сесии. WebRTC го използва за договаряне на параметри на връзката като кодеци, IP адреси и портове.</li>
                     </ul>
-                     <figure>
-                         <img src="img/placeholder_stun_turn.png" alt="Диаграма на STUN/TURN/Signaling" onerror="this.onerror=null; this.src='https://placehold.co/700x400/e2e8f0/334155?text=STUN/TURN+Diagram';" >
-                        <figcaption>Фигура 2. Роля на сигнализацията, STUN и TURN сървърите <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
-                    </figure>
+                     <figure id="figure-2-container"> <img src="images/stun-turn.jpeg" alt="Диаграма на STUN/TURN/Signaling" onerror="this.onerror=null;">
+                         <figcaption>Фигура 2. Роля на сигнализацията, STUN и TURN сървърите <a href="#fig-2" class="citation-marker">[Източник]</a></figcaption>
+                     </figure>
                 </section>
 
                  <section id="how-it-works" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 3;">
@@ -116,18 +115,19 @@
                         <div class="interactive-card border border-gray-200 p-4 rounded-lg">
                             <h3 class="text-lg font-semibold text-blue-600"><i class="fas fa-camera mr-2"></i> MediaStream (getUserMedia)</h3>
                             <p>Този API позволява на уеб приложенията да получат достъп до аудио и видео потоци от локални устройства като камери и микрофони. Резултатът е обект <code>MediaStream</code>, който може да бъде прикачен към <code>&lt;video&gt;</code> или <code>&lt;audio&gt;</code> елемент или добавен към <code>RTCPeerConnection</code> <a href="#ref-3" class="citation-marker">[3]</a>.</p>
-                            <pre><code class="language-javascript">// Пример за достъп до камера и микрофон
+                            <pre><code class="language-javascript">
+// Пример за достъп до камера и микрофон
 navigator.mediaDevices.getUserMedia({ video: true, audio: true }) // Искаме и аудио
-  .then(stream => {
-    // Нужен е <video id="localVideo"></video> елемент в HTML
+.then(stream => {
+    // Нужен е "&lt;video id=\"localVideo\"&gt;&lt;/video&gt;" елемент в HTML
     const videoElement = document.querySelector('video#localVideo');
     if (videoElement) videoElement.srcObject = stream;
     // stream може да се добави към RTCPeerConnection
     // stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-  })
-  .catch(error => {
+})
+.catch(error => {
     console.error('Грешка при достъп до медия:', error);
-  });</code></pre>
+});</code></pre>
                            <figcaption class="mt-2 text-sm text-gray-500">Код 1. Пример за използване на `getUserMedia`</figcaption>
                         </div>
 
@@ -170,7 +170,7 @@ if (peerConnection) {
     };
 
     peerConnection.ontrack = event => {
-      // Нужен е <video id="remoteVideo"></video> елемент в HTML
+      // Нужен е "&lt;video id=\"remoteVideo\"&gt;&lt;/video&gt;" елемент в HTML
       const remoteVideo = document.querySelector('video#remoteVideo');
       if (remoteVideo && event.streams && event.streams[0]) {
           remoteVideo.srcObject = event.streams[0];
@@ -277,10 +277,9 @@ function sendData(message) {
                     <p>
                         Други възможни механизми включват Server-Sent Events (SSE), HTTP long-polling или дори по-екзотични методи, но WebSockets са предпочитани заради ефективността си.
                     </p>
-                     <figure>
-                         <img src="img/placeholder_signaling.png" alt="Диаграма на Сигнализиращ Сървър" onerror="this.onerror=null; this.src='https://placehold.co/650x350/e2e8f0/334155?text=Signaling+Server';" >
-                        <figcaption>Фигура 3. Ролята на сигнализиращия сървър <a href="#ref-placeholder" class="citation-marker">[Източник]</a></figcaption>
-                    </figure>
+                     <figure id="figure-3-container"> <img src="images/RTCPeerConnection-diagram.png" alt="Диаграма на Сигнализиращ Сървър" onerror="this.onerror=null;" >
+                         <figcaption>Фигура 3. Ролята на сигнализиращия сървър <a href="#fig-3" class="citation-marker">[Източник]</a></figcaption>
+                     </figure>
                 </section>
 
                 <section id="php-integration" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in" style="--section-index: 7;">
@@ -491,33 +490,30 @@ $server->run();
                     </p>
                 </section>
 
-                <section id="bibliography" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in bibliography" style="--section-index: 11;">
+                 <section id="bibliography" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in bibliography" style="--section-index: 11;">
                     <h2>11. Цитирана Литература</h2>
-                     <p class="text-sm text-gray-600 mb-4">Забележка: Това са примерни цитати. Трябва да ги замените с реални източници на английски език, които сте използвали, и да ги форматирате според изискванията.</p>
                     <ol>
                         <li id="ref-1">
-                            MDN Web Docs, "WebRTC API", [https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API), последно посетен на 2025-04-25.
-                        </li>
+                            MDN Web Docs, "WebRTC API",
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API</a></li>
                         <li id="ref-2">
-                            Google Developers, "WebRTC basics: Signaling", [https://webrtc.org/getting-started/overview#signaling](https://webrtc.org/getting-started/overview#signaling), последно посетен на 2025-04-25. (Заменете с реален източник)
-                        </li>
+                            Google Developers, "WebRTC basics: Signaling",
+                            <a href="https://webrtc.org/getting-started/overview#signaling" target="_blank" rel="noopener noreferrer">https://webrtc.org/getting-started/overview#signaling</a> </li>
                          <li id="ref-3">
-                            MDN Web Docs, "MediaDevices.getUserMedia()", [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia), последно посетен на 2025-04-25.
-                        </li>
+                            MDN Web Docs, "MediaDevices.getUserMedia()",
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia</a></li>
                          <li id="ref-4">
-                            MDN Web Docs, "RTCPeerConnection", [https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection), последно посетен на 2025-04-25.
-                        </li>
+                            MDN Web Docs, "RTCPeerConnection",
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection</a></li>
                          <li id="ref-5">
-                            MDN Web Docs, "RTCDataChannel", [https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel), последно посетен на 2025-04-25.
-                        </li>
+                            MDN Web Docs, "RTCDataChannel",
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel</a></li>
                          <li id="ref-6">
-                            Sam Dutton, "WebRTC in the real world: STUN, TURN, and signaling", [https://webrtc.org/getting-started/overview](https://webrtc.org/getting-started/overview), последно посетен на 2025-04-25. (Заменете с реален, специфичен източник за сигнализация)
-                        </li>
+                            Sam Dutton, "WebRTC in the real world: STUN, TURN, and signaling",
+                            <a href="https://webrtc.org/getting-started/overview" target="_blank" rel="noopener noreferrer">https://webrtc.org/getting-started/overview</a></li>
                          <li id="ref-7">
-                            WebRTC.org, "Security", [https://webrtc.org/getting-started/security](https://webrtc.org/getting-started/security), последно посетен на 2025-04-25.
-                        </li>
-                        <li id="ref-placeholder">
-                            [Автор(и)], "[Заглавие на статия/ресурс]", [Издател/Уебсайт], [Дата на публикуване/достъп], [URL], последно посетен на ГГГГ-ММ-ДД. (Формат за други източници)
+                            WebRTC.org, "Security",
+                            <a href="https://webrtc-security.github.io/" target="_blank" rel="noopener noreferrer">https://webrtc-security.github.io/</a></li>
                         </li>
                     </ol>
                 </section>
@@ -525,9 +521,9 @@ $server->run();
                 <section id="figures-list" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in list-container" style="--section-index: 12; --list-prefix: 'Фигура';">
                     <h2>12. Списък с Фигури</h2>
                      <ol>
-                        <li>Илюстрация на WebRTC концепция <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
-                        <li>Роля на сигнализацията, STUN и TURN сървърите <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
-                        <li>Ролята на сигнализиращия сървър <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
+                         <li id="fig-1">Илюстрация на WebRTC концепция <a href="https://www.researchgate.net/figure/WebRTC-system-architecture_fig1_340419921" target="_blank" rel="noopener noreferrer" class="citation-marker">[Източник]</a></li>
+                         <li id="fig-2">Роля на сигнализацията, STUN и TURN сървърите <a href="https://blog.ivrpowers.com/post/technologies/what-is-stun-turn-server/" target="_blank" class="citation-marker">[Източник]</a></li>
+                         <li id="fig-3">Ролята на сигнализиращия сървър <a href="https://github.com/satanas/simple-signaling-server" target="_blank" class="citation-marker">[Източник]</a></li>
                     </ol>
                 </section>
 
@@ -540,20 +536,12 @@ $server->run();
                         <li>Псевдокод за PHP WebSocket сигнализиращ сървър с Ratchet</li>
                     </ol>
                 </section>
-
-                 <section id="tables-list" class="bg-white p-6 rounded-lg shadow-md mb-8 section-fade-in list-container" style="--section-index: 14; --list-prefix: 'Таблица';">
-                    <h2>14. Списък с Таблици</h2>
-                     <ol>
-                        <li>Протоколи за сигурност в WebRTC <a href="#ref-placeholder" class="citation-marker">[Източник]</a></li>
-                    </ol>
-                </section>
-
             </main>
         </div>
 
         <footer class="mt-12 pt-6 border-t border-gray-300 text-center text-gray-500 text-sm">
-             <p>&copy; {{ mainCtrl.currentDate | date:'yyyy' }} [Вашето Име]. Всички права запазени.</p>
-            <p>Реферат по Уеб Технологии, [Университет/Факултет]</p>
+             <p>&copy; {{ mainCtrl.currentDate | date:'yyyy' }} Преслав Петров. Всички права запазени.</p>
+            <p>Реферат по Уеб Технологии, ФМИ</p>
         </footer>
 
     </div>
